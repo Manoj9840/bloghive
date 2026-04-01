@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | BlogHive</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo/bloghive.png" alt="BlogHive Logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="categories.html">Categories</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="auth-form-container">
+        <h2 style="margin-bottom: 20px; text-align: center;">Create Account</h2>
+        <form id="register-form">
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" placeholder="First Name">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" placeholder="Last Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required placeholder="Pick a username">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Create a password">
+            </div>
+            <button type="submit" class="btn-primary"
+                style="width: 100%; border: none; cursor: pointer;">Register</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+            Already have an account? <a href="login.html" style="color: var(--primary-color);">Login here</a>
+        </p>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

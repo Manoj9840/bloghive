@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Blogs | BlogHive</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo/bloghive.png" alt="BlogHive Logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="view-blogs.html">Blogs</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="create-blog.html" class="btn-primary">Create Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" style="padding: 40px 0; border-radius: 0 0 20px 20px;">
+        <div class="container">
+            <h1 id="page-title">Explore All Stories</h1>
+            <p>Read the latest insights from our community.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="blog-grid" id="blog-list">
+            <!-- Sample Blogs -->
+            <div class="blog-card">
+                <div class="content">
+                    <span class="category">Technology</span>
+                    <h3>Understanding Python Decorators</h3>
+                    <p>A deep dive into how decorators work and why they are useful in your day-to-day coding...</p>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <a href="edit-blog.html"
+                            style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Edit</a>
+                        <a href="#" style="color: #ef4444; text-decoration: none; font-size: 0.9rem;">Delete</a>
+                    </div>
+                </div>
+            </div>
+            <!-- More blogs will be loaded here -->
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

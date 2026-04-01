@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Details | BlogHive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo/bloghive.png" alt="BlogHive Logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="view-blogs.html">Blogs</a></li>
+                <li><a href="categories.html">Categories</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container" style="margin-top: 50px; max-width: 800px;">
+        <article id="blog-detail-content">
+            <div style="text-align: center; padding: 50px;">
+                <p>Loading blog content...</p>
+            </div>
+        </article>
+
+        <!-- Comments Section -->
+        <section style="margin-top: 60px; padding-top: 40px; border-top: 2px solid #f1f5f9;">
+            <h2 style="font-size: 1.8rem; margin-bottom: 30px;">Comments</h2>
+
+            <div id="comment-form-container" style="margin-bottom: 40px; display: none;">
+                <form id="comment-form">
+                    <div class="form-group">
+                        <label for="comment-content">Leave a comment</label>
+                        <textarea id="comment-content" required placeholder="What are your thoughts?"
+                            style="min-height: 100px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="border: none; cursor: pointer;">Post
+                        Comment</button>
+                </form>
+            </div>
+
+            <div id="login-to-comment"
+                style="background: #f8fafc; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 40px;">
+                <p>Please <a href="login.html" style="color: var(--primary-color); font-weight: 600;">login</a> to leave
+                    a comment.</p>
+            </div>
+
+            <div id="comments-list">
+                <p style="color: var(--text-muted);">Loading comments...</p>
+            </div>
+        </section>
+
+        <div style="margin-top: 50px; padding-top: 30px; border-top: 1px solid #e2e8f0;">
+            <a href="view-blogs.html" class="btn-primary" style="text-decoration: none;">← Back to Blogs</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 BlogHive. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

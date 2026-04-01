@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tags | BlogHive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 50px;
+        }
+
+        .tag-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #f1f5f9;
+        }
+
+        .tag-card:hover {
+            transform: translateY(-5px);
+            background: #f1f5f9;
+            border-color: var(--primary-color);
+        }
+
+        .tag-card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .tag-card span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo/bloghive.png" alt="BlogHive Logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="view-blogs.html">Blogs</a></li>
+                <li><a href="categories.html">Categories</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" style="padding: 60px 0; border-radius: 0 0 50px 50px;">
+        <div class="container">
+            <h1>Browse by Tags</h1>
+            <p>Explore stories through specific topics and keywords.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="tag-grid" class="tag-grid">
+            <p style="text-align: center; grid-column: 1/-1;">Loading tags...</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 BlogHive. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

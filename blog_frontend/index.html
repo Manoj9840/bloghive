@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogHive | Modern Blogging Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo/bloghive.png" alt="BlogHive Logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="view-blogs.html">Blogs</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html" class="btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Share Your Story with the World.</h1>
+            <p>Join thousands of creators who share their thoughts, insights, and experiences on BlogHive. The most
+                elegant way to publish your ideas.</p>
+            <a href="register.html" id="hero-action-btn" class="btn-primary">Start Writing</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="blog-grid" id="blog-container">
+            <!-- Blogs will be loaded here via JS -->
+            <div class="blog-card">
+                <div class="content">
+                    <span class="category">Technology</span>
+                    <h3>The Future of Web Development in 2026</h3>
+                    <p>Discover the latest trends that are shaping the web, from AI-driven interfaces to the rise of
+                        edge computing...</p>
+                    <a href="#" class="read-more"
+                        style="color:var(--primary-color); font-weight:600; text-decoration:none;">Read More →</a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="content">
+                    <span class="category">Lifestyle</span>
+                    <h3>Mastering the Art of Productive Morning Rituals</h3>
+                    <p>How you spend your first hour defines your entire day. We explore the routines of the world's
+                        most successful leaders...</p>
+                    <a href="#" class="read-more"
+                        style="color:var(--primary-color); font-weight:600; text-decoration:none;">Read More →</a>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="content">
+                    <span class="category">Design</span>
+                    <h3>Why Minimalist UI is Still King in 2026</h3>
+                    <p>Minimalism isn't just a trend; it's a philosophy. Learn how to pare down your designs to the
+                        essentials...</p>
+                    <a href="#" class="read-more"
+                        style="color:var(--primary-color); font-weight:600; text-decoration:none;">Read More →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 BlogHive. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Built with &hearts; for creators.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
