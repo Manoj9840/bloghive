@@ -45,10 +45,17 @@ class BlogSerializer(serializers.ModelSerializer):
         read_only_fields = ('author', 'slug', 'tag_names', 'tags')
 
     def create(self, validated_data):
+        from django.db import IntegrityError
+        from rest_framework.exceptions import ValidationError
+        
         # Handle tags from request data
         tag_names = self.context['request'].data.get('tags', [])
-        blog = Blog.objects.create(**validated_data)
         
+        try:
+            blog = Blog.objects.create(**validated_data)
+        except IntegrityError:
+            raise ValidationError({'title': ['A blog with this title already exists.']})
+            
         if tag_names:
             tag_objs = []
             for name in tag_names:
@@ -60,9 +67,16 @@ class BlogSerializer(serializers.ModelSerializer):
         return blog
 
     def update(self, instance, validated_data):
-        tag_names = self.context['request'].data.get('tags', None)
-        instance = super().update(instance, validated_data)
+        from django.db import IntegrityError
+        from rest_framework.exceptions import ValidationError
         
+        tag_names = self.context['request'].data.get('tags', None)
+        
+        try:
+            instance = super().update(instance, validated_data)
+        except IntegrityError:
+            raise ValidationError({'title': ['A blog with this title already exists.']})
+            
         if tag_names is not None:
             tag_objs = []
             for name in tag_names:

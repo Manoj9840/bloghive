@@ -2,7 +2,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     RegisterView, LoginView, LogoutView, 
-    CategoryViewSet, BlogViewSet, UserBlogViewSet, CommentViewSet, FAQViewSet, TagViewSet
+    CategoryViewSet, BlogViewSet, UserBlogViewSet, CommentViewSet, FAQViewSet, TagViewSet,
+    FAQChatbotView, AIGrammarCheckView
 )
 
 router = DefaultRouter()
@@ -17,5 +18,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('chatbot/', FAQChatbotView.as_view(), name='chatbot_api'),
+    path('grammar-check/', AIGrammarCheckView.as_view(), name='grammar_check'),
     path('', include(router.urls)),
 ]

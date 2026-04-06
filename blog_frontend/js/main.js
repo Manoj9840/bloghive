@@ -50,6 +50,24 @@ const api = {
         }
     },
 
+    async patch(endpoint, data, token = null) {
+        try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Token ${token}`;
+
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                method: 'PATCH',
+                headers: headers,
+                body: JSON.stringify(data)
+            });
+            const responseData = await response.json();
+            return { data: responseData, ok: response.ok, status: response.status };
+        } catch (error) {
+            console.error('API PATCH Error:', error);
+            return { data: null, ok: false, status: 0 };
+        }
+    },
+
     async delete(endpoint, token = null) {
         try {
             const headers = {};
@@ -124,6 +142,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (heroBtn) {
                 heroBtn.innerText = 'Read Blogs';
                 heroBtn.href = 'view-blogs.html';
+                heroBtn.onclick = null; // Remove the interceptor if logged in
+            }
+        } else {
+            // Unauthenticated: Handle 'Write Blog' clicks
+            const writeBtns = document.querySelectorAll('.write-blog-btn');
+            writeBtns.forEach(btn => {
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    showAuthModal();
+                };
+            });
+
+            if (heroBtn) {
+                heroBtn.innerText = 'Start Writing';
+                heroBtn.href = '#';
+                heroBtn.onclick = (e) => {
+                    e.preventDefault();
+                    showAuthModal();
+                };
             }
         }
     };
@@ -208,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createBlogForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('title').value;
-            const category = document.getElementById('category').value;
+            const category = document.getElementById('category').value || null;
             const content = document.getElementById('content').value;
             const tagsInput = document.getElementById('tags')?.value || '';
             const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
@@ -232,7 +269,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('Blog published successfully!');
                 setTimeout(() => window.location.href = 'index.html', 1500);
             } else {
-                showToast('Failed to publish blog. Please try again.', 'error');
+                let errorMsg = 'Failed to publish blog.';
+                if (data && typeof data === 'object') {
+                    const firstError = Object.values(data)[0];
+                    errorMsg = Array.isArray(firstError) ? firstError[0] : firstError;
+                }
+                console.error('Publish Error:', data);
+                showToast(errorMsg, 'error');
             }
         });
     }
@@ -284,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (confirm(`Are you sure you want to delete the blog "${slug}"?`)) {
                             const token = localStorage.getItem('bloghive_token');
                             const success = await api.delete(`/blogs/${slug}/`, token);
-                            if (success) {
+                            if (success && success.ok) {
                                 showToast('Blog deleted successfully!');
                                 loadBlogs();
                             } else {
@@ -309,6 +352,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const loadBlogData = async () => {
             const { data, ok } = await api.get(`/blogs/${slug}/`);
             if (ok && data) {
+                const userJson = localStorage.getItem('bloghive_user');
+                const loggedInUser = userJson ? JSON.parse(userJson).username : null;
+                if (loggedInUser !== data.author_name) {
+                    showToast('You do not have permission to edit this blog.', 'error');
+                    setTimeout(() => window.location.href = 'view-blogs.html', 1500);
+                    return;
+                }
+
                 document.getElementById('title').value = data.title;
                 document.getElementById('category').value = data.category || '';
                 document.getElementById('content').value = data.content;
@@ -316,6 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (tagsInput && data.tag_names) {
                     tagsInput.value = data.tag_names.join(', ');
                 }
+            } else {
+                showToast('Blog not found or permission denied.', 'error');
+                setTimeout(() => window.location.href = 'view-blogs.html', 1500);
             }
         };
 
@@ -330,13 +384,14 @@ document.addEventListener('DOMContentLoaded', () => {
         editBlogForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('title').value;
-            const category = document.getElementById('category').value;
+            // Removed duplicate
+            const category = document.getElementById('category').value || null;
             const content = document.getElementById('content').value;
             const tagsInput = document.getElementById('tags')?.value || '';
             const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
             const token = localStorage.getItem('bloghive_token');
 
-            const { data, ok } = await api.put(`/my-blogs/${slug}/`, {
+            const { data, ok } = await api.patch(`/my-blogs/${slug}/`, {
                 title,
                 category,
                 content,
@@ -348,7 +403,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('Blog updated successfully!');
                 setTimeout(() => window.location.href = 'view-blogs.html', 1500);
             } else {
-                showToast('Failed to update blog.', 'error');
+                let errorMsg = 'Failed to update blog.';
+                if (data && typeof data === 'object') {
+                    const firstError = Object.values(data)[0];
+                    errorMsg = Array.isArray(firstError) ? firstError[0] : firstError;
+                }
+                showToast(errorMsg, 'error');
             }
         });
     }
@@ -527,5 +587,61 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         loadTags();
     }
+
+    // Modal Initialization
+    const initAuthModal = () => {
+        if (document.getElementById('auth-modal')) return;
+
+        const modalHtml = `
+            <div id="auth-modal" class="bh-modal-overlay">
+                <div class="bh-modal-content">
+                    <h3>Authentication Required</h3>
+                    <p>Please create an account or login first to write a blog.</p>
+                    <div class="bh-modal-actions">
+                        <button id="modal-cancel" class="bh-modal-btn cancel">Cancel</button>
+                        <button id="modal-ok" class="bh-modal-btn ok">OK, Login</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        const authModal = document.getElementById('auth-modal');
+        const modalCancel = document.getElementById('modal-cancel');
+        const modalOk = document.getElementById('modal-ok');
+
+        const hideAuthModal = () => authModal.classList.remove('active');
+
+        modalCancel.onclick = hideAuthModal;
+        modalOk.onclick = () => {
+            hideAuthModal();
+            window.location.href = 'login.html';
+        };
+
+        authModal.onclick = (e) => {
+            if (e.target === authModal) hideAuthModal();
+        };
+    };
+
+    const showAuthModal = () => {
+        const modal = document.getElementById('auth-modal');
+        if (modal) modal.classList.add('active');
+    };
+
+    // Initialize modal and nav
+    initAuthModal();
+    updateNav();
+
+    // Universal interception for Write/Create buttons
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('.write-blog-btn, #hero-action-btn, .btn-primary[href="create-blog.html"]');
+        if (target) {
+            const token = localStorage.getItem('bloghive_token');
+            if (!token) {
+                e.preventDefault();
+                showAuthModal();
+            }
+        }
+    });
 
 });

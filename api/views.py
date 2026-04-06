@@ -9,6 +9,9 @@ from .serializers import (
     UserSerializer, RegisterSerializer, CategorySerializer, 
     BlogSerializer, CommentSerializer, FAQSerializer, TagSerializer
 )
+from .ai_grammar import grammar_ai
+from .chatbot import get_chatbot_response
+from .permissions import IsAuthorOrAdmin
 
 # Authentication Views
 class RegisterView(generics.CreateAPIView):
@@ -54,7 +57,7 @@ class BlogViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return [permissions.AllowAny()]
-        return [permissions.IsAuthenticated()]
+        return [permissions.IsAuthenticated(), IsAuthorOrAdmin()]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -71,7 +74,7 @@ class BlogViewSet(viewsets.ModelViewSet):
 
 class UserBlogViewSet(viewsets.ModelViewSet):
     serializer_class = BlogSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsAuthorOrAdmin)
     lookup_field = 'slug'
 
     def get_queryset(self):
@@ -110,3 +113,40 @@ class FAQViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FAQ.objects.all()
     serializer_class = FAQSerializer
     permission_classes = (permissions.AllowAny,)
+
+class FAQChatbotView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        query = request.data.get('query', '')
+        if not query:
+            return Response({'error': 'No query provided'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Use grammar AI to clean the query before processing
+        corrected_query, _ = grammar_ai.suggest_correction(query)
+        
+        # Get response using TF-IDF logic (from filtered/corrected query)
+        answer = get_chatbot_response(corrected_query)
+        
+        return Response({
+            'query': query,
+            'corrected_query': corrected_query,
+            'answer': answer
+        })
+
+class AIGrammarCheckView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        text = request.data.get('text', '')
+        if not text:
+            return Response({'error': 'No text provided'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Now returns both corrected text and a list of changes
+        corrected_text, changes = grammar_ai.suggest_correction(text)
+        
+        return Response({
+            'original': text,
+            'corrected': corrected_text,
+            'changes': changes
+        })
