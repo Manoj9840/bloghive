@@ -14,6 +14,11 @@
             <a href="index.html" class="logo">
                 <img src="logo/bloghive.png" alt="BlogHive Logo">
             </a>
+            <div class="menu-toggle" id="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="categories.html">Categories</a></li>
@@ -41,7 +46,12 @@
                     <input type="text" id="tags" placeholder="e.g. technology, life, news">
                 </div>
                 <div class="form-group">
-                    <label for="content">Content</label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label for="content" style="margin-bottom: 0;">Content</label>
+                        <button type="button" id="ai-fix-btn" class="btn-secondary" style="font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--primary-color); background: #f0f7ff; color: var(--primary-color); cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                            <span id="ai-fix-icon">✨</span> <span id="ai-fix-text">Auto-Correct with AI</span>
+                        </button>
+                    </div>
                     <textarea id="content" rows="15" required placeholder="Start writing your story..."></textarea>
                 </div>
                 <button type="submit" class="btn-primary"

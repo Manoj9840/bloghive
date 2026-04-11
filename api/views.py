@@ -150,3 +150,4 @@ class AIGrammarCheckView(APIView):
             'corrected': corrected_text,
             'changes': changes
         })
+

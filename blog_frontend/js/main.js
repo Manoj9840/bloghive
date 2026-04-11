@@ -628,9 +628,95 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modal) modal.classList.add('active');
     };
 
+    // Grammar Check Logic
+    const handleGrammarCheck = async () => {
+        const contentArea = document.getElementById('content');
+        const fixBtn = document.getElementById('ai-fix-btn');
+        const fixText = document.getElementById('ai-fix-text');
+        const fixIcon = document.getElementById('ai-fix-icon');
+
+        if (!contentArea || !contentArea.value.trim()) {
+            showToast('Please enter some content to check.', 'error');
+            return;
+        }
+
+        // Visual feedback
+        const originalText = fixText.innerText;
+        fixBtn.disabled = true;
+        fixText.innerText = 'Analyzing...';
+        fixIcon.innerText = '⌛';
+        fixBtn.style.opacity = '0.7';
+
+        const { data, ok } = await api.post('/grammar-check/', { text: contentArea.value });
+
+        if (ok && data) {
+            if (data.corrected !== contentArea.value) {
+                contentArea.value = data.corrected;
+                const changeCount = data.changes ? data.changes.length : 0;
+                showToast(`✨ Magic! Fixed ${changeCount} spelling/grammar issues.`);
+            } else {
+                showToast('Your content looks great! No changes needed.');
+            }
+        } else {
+            showToast('AI Grammar service is currently unavailable.', 'error');
+        }
+
+        // Reset button
+        fixBtn.disabled = false;
+        fixText.innerText = originalText;
+        fixIcon.innerText = '✨';
+        fixBtn.style.opacity = '1';
+    };
+
+    // Attach grammar check to buttons
+    const aiFixBtn = document.getElementById('ai-fix-btn');
+    if (aiFixBtn) {
+        aiFixBtn.addEventListener('click', handleGrammarCheck);
+    }
+
+    // Mobile Menu Toggle Logic
+    const initMobileMenu = () => {
+        const menuToggle = document.getElementById('mobile-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (menuToggle && navLinks) {
+            menuToggle.onclick = (e) => {
+                e.stopPropagation();
+                menuToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            };
+
+            // Close menu when clicking outside
+            document.onclick = (e) => {
+                if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            };
+
+            // Close menu when a link is clicked
+            navLinks.onclick = (e) => {
+                if (e.target.tagName === 'A') {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            };
+        }
+    };
+
+    // Re-run mobile menu init since nav might be re-rendered on auth change
+    const originalUpdateNav = updateNav;
+    const patchedUpdateNav = () => {
+        originalUpdateNav();
+        initMobileMenu();
+    };
+
+    // Wrap the init
+    initMobileMenu();
+
     // Initialize modal and nav
     initAuthModal();
-    updateNav();
+    patchedUpdateNav();
 
     // Universal interception for Write/Create buttons
     document.addEventListener('click', (e) => {
